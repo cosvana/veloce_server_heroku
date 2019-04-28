@@ -24,7 +24,8 @@
     "typescript": "3.4.5"
   },
   "scripts": {
-    
+    "start": "node app.js",
+    "deploy": "gcloud app deploy"
   },
   "eslintConfig": {
     "extends": "react-app"

@@ -1,3 +1,5 @@
+'use strict';
+
 var express = require('express');
 var app = express();
 var fs = require("fs");
@@ -13,6 +15,10 @@ app.use(function (req, res, next) {
 });
 
 app.use(express.json());
+
+app.get('/', function(request, response){
+  response.send("It works");
+});
 
 app.post('/api/photos', function (request, response) {
   let body = request.body;
@@ -42,12 +48,12 @@ app.post('/api/photos', function (request, response) {
   }
 
   const dir = moment().format("YYYY-MM-DD");
-  if (!fs.existsSync(`./${dir}`))
-    fs.mkdirSync(`./${dir}`);
+  if (!fs.existsSync(`${__dirname}/${dir}`))
+    fs.mkdirSync(`${__dirname}/${dir}`);
 
   var imageBuffer = decodeBase64Image(request.body.photo);
   fs.writeFile(
-    `./${dir}/${Date.now()}_${request.body.driver}_${request.body.location}.jpg`,
+    `${__dirname}/${dir}/${Date.now()}_${request.body.driver}_${request.body.location}.jpg`,
     imageBuffer.data,
     function (err) {
       if (err != null) {
@@ -65,7 +71,9 @@ app.post('/api/photos', function (request, response) {
   });
 });
 
-app.listen();
+app.listen(8080, ()=>{
+  console.log(`App listening`);
+});
 
 function decodeBase64Image(dataString) {
   var matches = dataString.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/),
